@@ -1,0 +1,21 @@
+version: '3.4'
+
+services: 
+  frontend:
+    image: dotawinfrontend
+    build:
+      context: .
+      dockerfile: Dotawin.Client/Dockerfile
+    environment: 
+      - backendUrl=http://backend
+    ports:
+      - "5902:80"
+    depends_on: 
+      - backend
+  backend:
+    image: dotawinbackend
+    build:
+      context: .
+      dockerfile: Dotawin.Server/Dockerfile
+    ports: 
+      - "5000:80"

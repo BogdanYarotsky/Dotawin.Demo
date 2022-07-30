@@ -1,0 +1,23 @@
+﻿@page "/grpctest"
+@inject Greeter.GreeterClient Client
+
+<PageTitle>Grpc Test</PageTitle>
+
+<h1>Ask anything from the server!</h1>
+@if (Message != null)
+{
+    <p><em>@Message</em></p>
+}
+
+<button class="btn btn-primary" @onclick="AskServer">Ask server</button>
+
+@code {
+    private string? Message;
+
+    private async Task AskServer()
+    {
+        var response = await Client.SayHelloAsync(new HelloRequest());
+        Message = response.Message;
+    }
+
+}
