@@ -7,9 +7,11 @@ public class Hero
     public bool IsCarry { get; set; }
     public int Popularity { get; set; }
     public double Winrate { get; set; }
-    public ICollection<Item> Items { get; set; } = new List<Item>();
 
+    // FK
     public int UpdateId { get; set; }
     public Update Update { get; set; }
 
+    // FK
+    public ICollection<Item> Items { get; set; } = new List<Item>();
 }
