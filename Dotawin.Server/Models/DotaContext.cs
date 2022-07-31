@@ -7,11 +7,16 @@ public class DotaContext : DbContext
     public DbSet<Hero> Heroes { get; set; }
     public DbSet<Item> Items { get; set; }
 
+    public DbSet<ItemUpdate> DotaUpdates { get; set; }
+    public DbSet<ItemInfo> InGameItems { get; set; }
+
     public DotaContext(DbContextOptions<DotaContext> options) : base(options)
     {
 
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
-        => builder.HasPostgresEnum<ItemType>();
+    {
+        builder.HasPostgresEnum<ItemType>();
+    }
 }

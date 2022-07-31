@@ -61,22 +61,19 @@ namespace Dotawin.Server.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("AddWinrate")
+                    b.Property<double>("AddedWinrate")
                         .HasColumnType("double precision");
 
-                    b.Property<int>("Cost")
+                    b.Property<int>("HeroId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("HeroId")
+                    b.Property<int>("InfoId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Matches")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Type")
+                    b.Property<int>("UpdateId")
                         .HasColumnType("integer");
 
                     b.Property<double>("Winrate")
@@ -89,7 +86,57 @@ namespace Dotawin.Server.Migrations
 
                     b.HasIndex("HeroId");
 
+                    b.HasIndex("InfoId");
+
+                    b.HasIndex("UpdateId");
+
                     b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("Dotawin.Server.Models.ItemInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cost")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UpdateId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UpdateId");
+
+                    b.ToTable("InGameItems");
+                });
+
+            modelBuilder.Entity("Dotawin.Server.Models.ItemUpdate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Patch")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DotaUpdates");
                 });
 
             modelBuilder.Entity("Dotawin.Server.Models.Update", b =>
@@ -127,7 +174,34 @@ namespace Dotawin.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Dotawin.Server.Models.ItemInfo", "Info")
+                        .WithMany("Items")
+                        .HasForeignKey("InfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Dotawin.Server.Models.Update", "Update")
+                        .WithMany("Items")
+                        .HasForeignKey("UpdateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Hero");
+
+                    b.Navigation("Info");
+
+                    b.Navigation("Update");
+                });
+
+            modelBuilder.Entity("Dotawin.Server.Models.ItemInfo", b =>
+                {
+                    b.HasOne("Dotawin.Server.Models.ItemUpdate", "Update")
+                        .WithMany("Items")
+                        .HasForeignKey("UpdateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Update");
                 });
 
             modelBuilder.Entity("Dotawin.Server.Models.Hero", b =>
@@ -135,9 +209,21 @@ namespace Dotawin.Server.Migrations
                     b.Navigation("Items");
                 });
 
+            modelBuilder.Entity("Dotawin.Server.Models.ItemInfo", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Dotawin.Server.Models.ItemUpdate", b =>
+                {
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("Dotawin.Server.Models.Update", b =>
                 {
                     b.Navigation("Heroes");
+
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

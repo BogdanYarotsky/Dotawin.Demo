@@ -3,7 +3,9 @@ using Dotawin.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var connStr = builder.Configuration.GetConnectionString("docker");
+var isContainer = Environment.GetEnvironmentVariable("isContainer");
+var configConnString = isContainer == null ? "local" : "docker";
+var connStr = builder.Configuration.GetConnectionString(configConnString);
 builder.Services.AddDbContext<DotaContext>(o => o.UseNpgsql(connStr));
 builder.Services.AddGrpc();
 var app = builder.Build();

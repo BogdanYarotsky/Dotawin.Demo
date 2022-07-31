@@ -20,7 +20,7 @@ public class GreeterService : Greeter.GreeterBase
         var hero = await _db.Heroes.FirstOrDefaultAsync();
         return new HelloReply
         {
-            Message = $"{hero.Name} is a fucking piece of junk. Have a nice day!"
+            Message = $"{hero?.Name} is a fucking piece of junk. Have a nice day!"
         };
     }
 }

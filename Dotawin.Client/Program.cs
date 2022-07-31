@@ -13,7 +13,15 @@ builder.Services.AddGrpcClient<Greeter.GreeterClient>(o =>
     var baseAddress = GetEnvironmentVariable("backendUrl");
     if (baseAddress == null) throw new ArgumentNullException(nameof(baseAddress));
     o.Address = new Uri(baseAddress);
-});
+
+}).ConfigurePrimaryHttpMessageHandler(() => // https://docs.microsoft.com/en-us/aspnet/core/grpc/performance?view=aspnetcore-6.0
+    new SocketsHttpHandler
+    {
+        PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan,
+        KeepAlivePingDelay = TimeSpan.FromSeconds(60),
+        KeepAlivePingTimeout = TimeSpan.FromSeconds(30),
+        EnableMultipleHttp2Connections = true
+    });
 
 var app = builder.Build();
 
