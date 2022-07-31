@@ -10,4 +10,5 @@ builder.Services.AddDbContext<DotaContext>(o => o.UseNpgsql(connStr));
 builder.Services.AddGrpc();
 var app = builder.Build();
 app.MapGrpcService<GreeterService>();
+app.MapGrpcService<UpdaterService>();
 app.Run();

@@ -6,12 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 public class GreeterService : Greeter.GreeterBase
 {
-    private readonly ILogger<GreeterService> _logger;
     private readonly DotaContext _db;
 
-    public GreeterService(ILogger<GreeterService> logger, DotaContext db)
+    public GreeterService(DotaContext db)
     {
-        _logger = logger;
         _db = db;
     }
 

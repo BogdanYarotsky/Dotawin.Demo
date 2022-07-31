@@ -22,3 +22,13 @@ services:
       - isContainer=1
     ports: 
       - "5000:80"
+  updater:
+   image: dotawinupdater
+   build:
+     context: .
+     dockerfile: Dotawin.Updater/Dockerfile
+   environment:
+     - backendUrl=http://backend
+     - isContainer=1
+   depends_on: 
+     - backend
